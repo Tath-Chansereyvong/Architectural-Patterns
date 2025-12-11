@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    command: npm run start:dev
+    ports:
+      - "3000:3000"
+    environment:
+      RABBITMQ_URL: amqp://admin:admin@rabbitmq:5672
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    depends_on:
+      - rabbitmq
+
+  order-worker:
+    build: ./order-worker
+    container_name: order-worker
+    command: npm run start:dev
+    environment:
+      RABBITMQ_URL: amqp://admin:admin@rabbitmq:5672
+    volumes:
+      - ./order-worker:/app
+      - /app/node_modules
+    depends_on:
+      - rabbitmq
+
+postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: order-worker
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
