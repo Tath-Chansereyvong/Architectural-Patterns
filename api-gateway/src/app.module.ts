@@ -23,6 +23,12 @@ import { NotificationsModule } from './notifications/notifications.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    NotificationsModule.forRoot({
+      appName: 'API Gateway Lab',
+      defaultChannel: 'log',
+      enable: true,
+    }),
+    
   ],
   controllers: [AppController],
   providers: [AppService],

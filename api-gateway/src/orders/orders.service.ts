@@ -15,11 +15,11 @@ export class OrdersService {
     // In real life we might validate or save to DB first
     // Here we just emit an event
     console.log('emit order_created 11');
-    this.client.emit('order_created','');
+    this.client.emit('order_created', { order: orderDto, createdAt: new Date().toISOString() });
     this.paymentsService.hello();
-    this.notifications.notify('order_created',{message: 'Cas for life'});
     return { status: 'Order accepted', order: orderDto };
   }
+  
   deleteOrder() {
     this.client.emit('order_deleted', {});
     return { status: 'Order deleted' };

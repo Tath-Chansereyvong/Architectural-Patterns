@@ -20,6 +20,12 @@ import { NotificationsModule } from 'src/notifications/notifications.module';
         },
       },
     ]),
+    NotificationsModule.forFeature({
+      featureName: 'orders',
+      prefix: '[ORDERS]',
+      channels: ['log', 'telegram'], // override global default
+      enable: true,
+    }),
     NotificationsModule,
   ],
   controllers: [OrdersController],
