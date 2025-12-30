@@ -24,6 +24,8 @@ services:
       - /app/node_modules
     depends_on:
       - rabbitmq
+    env_file:
+      - .env
 
   order-worker:
     build: ./order-worker
