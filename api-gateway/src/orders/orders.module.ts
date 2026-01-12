@@ -4,9 +4,11 @@ import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { PaymentsModule } from 'src/payments/payments.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
+import { CustomersModule } from 'src/modules/customers/customers.module';
 
 @Module({
   imports: [
+    CustomersModule,
     forwardRef(() => PaymentsModule),
     forwardRef(() => NotificationsModule),
     ClientsModule.register([

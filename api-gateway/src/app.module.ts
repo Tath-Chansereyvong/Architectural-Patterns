@@ -9,6 +9,7 @@ import { DatabaseModule } from './modules/database/database.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ProductModule } from './modules/product/product.module';
 import { ConfigModule } from '@nestjs/config';
+import { CustomersModule } from './modules/customers/customers.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
     PaymentsModule,
     ProductModule,
     CategoryModule,
+    CustomersModule,
     NotificationsModule.forRoot({
       appName: 'API Gateway Lab',
       defaultChannel: 'log',

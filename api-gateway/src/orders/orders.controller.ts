@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Notify } from '../notifications/notify.decorator';
+import { VerifyCustomerPipe } from 'src/modules/customers/pipes/verify-customer-pipe';
 
 @Controller('orders')
 export class OrdersController {
@@ -8,7 +9,7 @@ export class OrdersController {
 
   @Post()
   @Notify('orders', 'order_created')
-  create(@Body() body: any) {
+  create(@Body(VerifyCustomerPipe) body: any) {
     console.log('controller create');
     return this.ordersService.createOrder(body);
   }
