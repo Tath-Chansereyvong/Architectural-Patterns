@@ -31,6 +31,8 @@ services:
     build: ./order-worker
     container_name: order-worker
     command: npm run start:dev
+    ports:
+      - "3002:3000"
     environment:
       RABBITMQ_URL: amqp://admin:admin@rabbitmq:5672
     volumes:
@@ -38,6 +40,8 @@ services:
       - /app/node_modules
     depends_on:
       - rabbitmq
+    env_file:
+      - .env
 
   auth-service:
     build: ./auth-service

@@ -1,23 +1,22 @@
-import { Controller } from '@nestjs/common';
-import { Injectable, Logger } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
+import { Notify } from '../notifications/notify.decorator';
+import { VerifyCustomerPipe } from 'src/modules/customers/pipes/verify-customer-pipe';
 
 @Controller('orders')
 export class OrdersController {
-    
-  private readonly logger = new Logger(OrdersService.name);
-  private readonly processedOrders: any[] = []; // simple "DB"
-    @EventPattern('order_created')
-    handleOrderCreated(@Payload() data: any, @Ctx() context: RmqContext) {
-        this.logger.log(`Received order_created event: ${JSON.stringify(data)}`);
-        this.processedOrders.push({
-            ...data,
-          processedAt: new Date().toISOString(),
-    });
+  constructor(private readonly ordersService: OrdersService) {}
 
-    const channel = context.getChannelRef();
-    const originalMsg = context.getMessage();
-    channel.ack(originalMsg);
+  @Post()
+  @Notify('orders', 'order_created')
+  create(@Body(VerifyCustomerPipe) body: any) {
+    console.log('controller create');
+    return this.ordersService.createOrder(body);
+  }
+
+  @Delete()
+  delete() {
+    console.log("Delete order");
+    return this.ordersService.deleteOrder();
   }
 }

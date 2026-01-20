@@ -1,0 +1,35 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CategoryType {
+  id: ID!
+  name: String!
+}
+
+type ProductType {
+  id: ID!
+  name: String!
+  price: Float!
+  categoryId: ID!
+  category: CategoryType
+}
+
+type Query {
+  categories: [CategoryType!]!
+  products: [ProductType!]!
+  product(id: String!): ProductType
+  productsByCategory(categoryId: String!): [ProductType!]!
+}
+
+type Mutation {
+  createCategory(name: String!): CategoryType!
+  createProduct(input: CreateProductInput!): ProductType!
+}
+
+input CreateProductInput {
+  name: String!
+  price: Float!
+  sku: String!
+  categoryId: ID!
+}

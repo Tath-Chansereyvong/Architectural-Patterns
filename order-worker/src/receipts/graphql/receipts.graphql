@@ -1,0 +1,17 @@
+type Receipt {
+  receiptId: ID!
+  name: String!
+  price: Float!
+  issuedAt: String!
+}
+
+type Query {
+  receipts: [Receipt!]!
+  receipt(receiptId: ID!): Receipt
+}
+
+type Mutation {
+  createReceipt(name: String!, price: Float!, issuedAt: String!): Receipt!
+  updateReceipt(receiptId: ID!, name: String, price: Float, issuedAt: String): Receipt!
+  deleteReceipt(receiptId: ID!): Boolean!
+}

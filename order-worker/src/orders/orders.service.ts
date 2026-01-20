@@ -1,27 +1,27 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { NotificationsService } from 'src/notifications/notifications.service';
+import { PaymentsService } from 'src/payments/payments.service';
 
 @Injectable()
 export class OrdersService {
-  private readonly logger = new Logger(OrdersService.name);
-  private readonly processedOrders: any[] = []; // simple "DB"
+  constructor(
+    @Inject('ORDERS_SERVICE') private readonly client: ClientProxy,
+    private readonly paymentsService: PaymentsService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
-  // @EventPattern('order_created')
-  // handleOrderCreated(@Payload() data: any, @Ctx() context: RmqContext) {
-  //   this.logger.log(`Received order_created event: ${JSON.stringify(data)}`);
-  //   this.processedOrders.push({
-  //     ...data,
-  //     processedAt: new Date().toISOString(),
-  //   });
-
-  //   const channel = context.getChannelRef();
-  //   const originalMsg = context.getMessage();
-  //   channel.ack(originalMsg);
-  // }
-
-
-  // Optional: method to view "DB" in logs
-  printAll() {
-    this.logger.log(`All processed orders: ${JSON.stringify(this.processedOrders)}`);
+  async createOrder(orderDto: any) {
+    // In real life we might validate or save to DB first
+    // Here we just emit an event
+    console.log('emit order_created 11');
+    this.client.emit('order_created', { order: orderDto, createdAt: new Date().toISOString() });
+    this.paymentsService.hello();
+    return { status: 'Order accepted', order: orderDto };
+  }
+  
+  deleteOrder() {
+    this.client.emit('order_deleted', {});
+    return { status: 'Order deleted' };
   }
 }
