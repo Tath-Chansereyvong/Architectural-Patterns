@@ -5,6 +5,8 @@ import { OrdersService } from './orders.service';
 import { PaymentsModule } from 'src/payments/payments.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 import { CustomersModule } from 'src/modules/customers/customers.module';
+import { JwtStrategy } from 'src/strategies/jwt.strategies';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -29,9 +31,10 @@ import { CustomersModule } from 'src/modules/customers/customers.module';
       enable: true,
     }),
     NotificationsModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [OrdersController],
-  providers: [OrdersService],
+  providers: [OrdersService, JwtStrategy],
   exports: [OrdersService],
 })
 export class OrdersModule {}

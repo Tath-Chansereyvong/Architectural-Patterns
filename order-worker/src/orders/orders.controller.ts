@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { OrdersService } from './orders.service';
+import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 import { Notify } from '../notifications/notify.decorator';
 import { VerifyCustomerPipe } from 'src/modules/customers/pipes/verify-customer-pipe';
 
@@ -18,5 +19,11 @@ export class OrdersController {
   delete() {
     console.log("Delete order");
     return this.ordersService.deleteOrder();
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  list(@Req() req: any) {
+    return { user: req.user, orders: [] };
   }
 }
