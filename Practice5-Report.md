@@ -28,7 +28,7 @@ At least 95% of all requests must complete within 400ms. Any sustained violation
 | Metric | Baseline | With HPA | With Caching |
 |--------|----------|----------|--------------|
 | Replicas | 2 (fixed) | 2-10 (auto) | 2-10 (auto) |
-| RPS | 1171.82 | 1125.39 | 5890.26 |
+| RPS | 1171.82 | 4368.96 | 5890.26 |
 | P95 Latency | ~181.4ms | ~121.74ms | ~205ms |
 | P99 Latency | 206.85ms | 151.25ms | 353.20ms |
 | Errors | None | None | None |
